@@ -58,16 +58,26 @@
 				</div>
 		  	</div>
 		</div>
+
+		<div class="columns">
+			<div class="column">
+				<div class="control">
+					<label>Detalle o descripción</label>
+					<textarea class="textarea" name="producto_detalle" maxlength="255" placeholder="Escribe una breve descripción del producto" required></textarea>
+				</div>
+			</div>
+		</div>
+		
 		<div class="columns">
 			<div class="column">
 				<label>Foto o imagen del producto</label><br>
 				<div class="file is-small has-name">
 				  	<label class="file-label">
-				    	<input class="file-input" type="file" name="producto_foto" accept=".jpg, .png, .jpeg" >
+				    	<input id="fileInput" class="file-input" type="file" name="producto_foto" accept=".jpg, .png, .jpeg" >
 				    	<span class="file-cta">
 				      		<span class="file-label">Imagen</span>
 				    	</span>
-				    	<span class="file-name">JPG, JPEG, PNG. (MAX 3MB)</span>
+				    	<span id="fileName" class="file-name">JPG, JPEG, PNG. (MAX 3MB)</span>
 				  	</label>
 				</div>
 			</div>
@@ -76,4 +86,19 @@
 			<button type="submit" class="button is-info is-rounded">Guardar</button>
 		</p>
 	</form>
+	<script>
+		const fileInput = document.getElementById('fileInput');
+		const fileName = document.getElementById('fileName');
+
+		fileInput.addEventListener('change', () => {
+			if (fileInput.files.length > 0) {
+				fileName.textContent = fileInput.files[0].name;
+			} else {
+				fileName.textContent = "JPG, JPEG, PNG. (MAX 3MB)";
+			}
+	    });
+    </script>
 </div>
+
+
+ 

@@ -5,7 +5,7 @@
 
 <div class="container pb-6 pt-6">
 	<?php
-		include "./inc/btn_back.php";
+		
 
 		require_once "./php/main.php";
 
@@ -78,6 +78,34 @@
 				</div>
 		  	</div>
 		</div>
+
+		<div class="form-rest mb-6 mt-6"></div>
+
+		<div class="columns">
+			<div class="column">
+				<div class="control">
+					<label>Detalle o descripción</label>
+					<textarea class="textarea" name="producto_detalle" maxlength="255" required><?php echo $datos['producto_detalle']; ?></textarea>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="columns">
+			<div class="column">
+				<label>Foto o imagen del producto</label><br>
+				<div class="file is-small has-name">
+				  	<label class="file-label">
+				    	<input id="fileInput" class="file-input" type="file" name="producto_foto" accept=".jpg, .png, .jpeg" >
+				    	<span class="file-cta">
+				      		<span class="file-label">Imagen</span>
+				    	</span>
+				    	<span id="fileName" class="file-name">JPG, JPEG, PNG. (MAX 3MB)</span>
+				  	</label>
+				</div>
+			</div>
+		</div>
+		
 		<p class="has-text-centered">
 			<button type="submit" class="button is-success is-rounded">Actualizar</button>
 		</p>
@@ -88,4 +116,16 @@
 		}
 		$check_producto=null;
 	?>
+	<script>
+		const fileInput = document.getElementById('fileInput');
+		const fileName = document.getElementById('fileName');
+
+		fileInput.addEventListener('change', () => {
+			if (fileInput.files.length > 0) {
+				fileName.textContent = fileInput.files[0].name;
+			} else {
+				fileName.textContent = "JPG, JPEG, PNG. (MAX 3MB)";
+			}
+	    });
+    </script>
 </div>

@@ -28,6 +28,14 @@
         $registros=15;
         $busqueda="";
 
+        if(isset($_SESSION['mensaje'])){
+            echo '<div class="notification is-'.$_SESSION['tipo'].' is-light">
+                    '.$_SESSION['mensaje'].'
+                </div>';
+            unset($_SESSION['mensaje']);
+            unset($_SESSION['tipo']); 
+        }
+
         # Paginador producto #
         require_once "./php/producto_lista.php";
     ?>

@@ -28,15 +28,5 @@
                 include "./vistas/404.php";
             }
         ?>
-        <script>
-            window.addEventListener("pageshow", () => {
-                if(vistaActual === "home"){
-                    const inputBusqueda = document.getElementById("busqueda");
-                    if(inputBusqueda){
-                        inputBusqueda.value="";
-                    }
-                }
-            });
-        </script>
     </body>
 </html>

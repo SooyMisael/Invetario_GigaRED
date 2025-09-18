@@ -40,7 +40,7 @@
 
 
     /*== Verificando integridad de los datos ==*/
-    if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{4,50}",$nombre)){
+    if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,50}",$nombre)){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -51,7 +51,7 @@
     }
 
     if($ubicacion!=""){
-    	if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{5,150}",$ubicacion)){
+    	if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,150}",$ubicacion)){
 	        echo '
 	            <div class="notification is-danger is-light">
 	                <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -91,18 +91,14 @@
     ];
 
     if($actualizar_categoria->execute($marcadores)){
-        echo '
-            <div class="notification is-info is-light">
-                <strong>¡CATEGORIA ACTUALIZADA!</strong><br>
-                La categoría se actualizo con exito
-            </div>
-        ';
-    }else{
-        echo '
-            <div class="notification is-danger is-light">
-                <strong>¡Ocurrio un error inesperado!</strong><br>
-                No se pudo actualizar la categoría, por favor intente nuevamente
-            </div>
-        ';
+        echo json_encode([
+            "success" => true,
+            "redirect" => "/Inventario_GigaRED-main/index.php?vista=category_list"
+        ]);
+    } else {
+        echo json_encode([
+            "success" => false,
+            "message" => "Error al actualizar el producto"
+        ]);
     }
     $actualizar_categoria=null;

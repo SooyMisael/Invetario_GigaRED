@@ -1,36 +1,27 @@
-const formularios_ajax=document.querySelectorAll(".FormularioAjax");
+document.addEventListener("DOMContentLoaded", function(){
+    const formularios_ajax = document.querySelectorAll(".FormularioAjax");
 
-function enviar_formulario_ajax(e){
-    e.preventDefault();
+    formularios_ajax.forEach(form => {
+        form.addEventListener("submit", function(e){
+            e.preventDefault(); // Evita envío normal
 
-    let enviar=confirm("Quieres enviar el formulario");
+            const data = new FormData(this);
+            const action = this.getAttribute("action");
+            const method = this.getAttribute("method");
 
-    if(enviar==true){
-
-        let data= new FormData(this);
-        let method=this.getAttribute("method");
-        let action=this.getAttribute("action");
-
-        let encabezados= new Headers();
-
-        let config={
-            method: method,
-            headers: encabezados,
-            mode: 'cors',
-            cache: 'no-cache',
-            body: data
-        };
-
-        fetch(action,config)
-        .then(respuesta => respuesta.text())
-        .then(respuesta =>{ 
-            let contenedor=document.querySelector(".form-rest");
-            contenedor.innerHTML = respuesta;
+            fetch(action, { method: method, body: data })
+                .then(res => res.json())
+                .then(respuesta => {
+                    console.log("Respuesta del servidor:", respuesta); // <- revisa esto
+                    if(respuesta.success && respuesta.redirect){
+                        // 🔹 redirección inmediata
+                        window.location.href = respuesta.redirect.replace(/\\/g,'');
+                        return;
+                    }
+                })
+                .catch(err => console.error("Error AJAX:", err));
         });
-    }
-
-}
-
-formularios_ajax.forEach(formularios => {
-    formularios.addEventListener("submit",enviar_formulario_ajax);
+    });
 });
+
+

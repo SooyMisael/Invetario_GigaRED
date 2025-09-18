@@ -6,14 +6,14 @@
 	/*== Almacenando datos ==*/
 	$codigo=limpiar_cadena($_POST['producto_codigo']);
 	$nombre=limpiar_cadena($_POST['producto_nombre']);
-
 	$precio=limpiar_cadena($_POST['producto_precio']);
 	$stock=limpiar_cadena($_POST['producto_stock']);
 	$categoria=limpiar_cadena($_POST['producto_categoria']);
+    $detalle=limpiar_cadena($_POST['producto_detalle']);
 
 
 	/*== Verificando campos obligatorios ==*/
-    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria==""){
+    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria=="" || $detalle==""){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -192,7 +192,7 @@
 
 	/*== Guardando datos ==*/
     $guardar_producto=conexion();
-    $guardar_producto=$guardar_producto->prepare("INSERT INTO producto(producto_codigo,producto_nombre,producto_precio,producto_stock,producto_foto,categoria_id) VALUES(:codigo,:nombre,:precio,:stock,:foto,:categoria)");
+    $guardar_producto=$guardar_producto->prepare("INSERT INTO producto(producto_codigo,producto_nombre,producto_precio,producto_stock,producto_foto,producto_detalle,categoria_id) VALUES(:codigo,:nombre,:precio,:stock,:foto,:detalle,:categoria)");
 
     $marcadores=[
         ":codigo"=>$codigo,
@@ -200,18 +200,17 @@
         ":precio"=>$precio,
         ":stock"=>$stock,
         ":foto"=>$foto,
+        ":detalle"=>$detalle,
         ":categoria"=>$categoria
     ];
 
     $guardar_producto->execute($marcadores);
 
     if($guardar_producto->rowCount()==1){
-        echo '
-            <div class="notification is-info is-light">
-                <strong>¡PRODUCTO REGISTRADO!</strong><br>
-                El producto se registro con exito
-            </div>
-        ';
+        echo json_encode([
+            "success"=>true,
+            "redirect"=>"/Inventario_GigaRED-main/index.php?vista=product_list"
+        ]);
     }else{
 
     	if(is_file($img_dir.$foto)){
@@ -219,11 +218,9 @@
 			unlink($img_dir.$foto);
         }
 
-        echo '
-            <div class="notification is-danger is-light">
-                <strong>¡Ocurrio un error inesperado!</strong><br>
-                No se pudo registrar el producto, por favor intente nuevamente
-            </div>
-        ';
+        echo json_encode([
+            "success"=>false,
+            "message"=>"No se pudo registrar el producto"
+        ]);
     }
     $guardar_producto=null;

@@ -26,14 +26,14 @@
     /*== Almacenando datos ==*/
     $codigo=limpiar_cadena($_POST['producto_codigo']);
 	$nombre=limpiar_cadena($_POST['producto_nombre']);
-
+    $detalle=limpiar_cadena($_POST['producto_detalle']);
 	$precio=limpiar_cadena($_POST['producto_precio']);
 	$stock=limpiar_cadena($_POST['producto_stock']);
 	$categoria=limpiar_cadena($_POST['producto_categoria']);
 
 
 	/*== Verificando campos obligatorios ==*/
-    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria==""){
+    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria=="" || $detalle==""){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -136,34 +136,113 @@
 	    $check_categoria=null;
     }
 
+    /* Directorios de imagenes */
+	$img_dir='../img/producto/';
+
+    /* Inicializamos $foto con la que ya tiene el producto */
+    $foto = $datos['producto_foto'];
+
+	/*== Comprobando si se ha seleccionado una imagen ==*/
+	if($_FILES['producto_foto']['name']!="" && $_FILES['producto_foto']['size']>0){
+
+        /* Creando directorio de imagenes */
+        if(!file_exists($img_dir)){
+            if(!mkdir($img_dir,0777)){
+                echo '
+                    <div class="notification is-danger is-light">
+                        <strong>¡Ocurrio un error inesperado!</strong><br>
+                        Error al crear el directorio de imagenes
+                    </div>
+                ';
+                exit();
+            }
+        }
+
+		/* Comprobando formato de las imagenes */
+		if(mime_content_type($_FILES['producto_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['producto_foto']['tmp_name'])!="image/png"){
+			echo '
+	            <div class="notification is-danger is-light">
+	                <strong>¡Ocurrio un error inesperado!</strong><br>
+	                La imagen que ha seleccionado es de un formato que no está permitido
+	            </div>
+	        ';
+	        exit();
+		}
+
+
+		/* Comprobando que la imagen no supere el peso permitido */
+		if(($_FILES['producto_foto']['size']/1024)>3072){
+			echo '
+	            <div class="notification is-danger is-light">
+	                <strong>¡Ocurrio un error inesperado!</strong><br>
+	                La imagen que ha seleccionado supera el límite de peso permitido
+	            </div>
+	        ';
+			exit();
+		}
+
+
+		/* extencion de las imagenes */
+		switch(mime_content_type($_FILES['producto_foto']['tmp_name'])){
+			case 'image/jpeg':
+			  $img_ext=".jpg";
+			break;
+			case 'image/png':
+			  $img_ext=".png";
+			break;
+		}
+
+		/* Cambiando permisos al directorio */
+		chmod($img_dir, 0777);
+
+		/* Nombre de la imagen */
+		$img_nombre=renombrar_fotos($nombre);
+
+		/* Nombre final de la imagen */
+		$foto=$img_nombre.$img_ext;
+
+		/* Moviendo imagen al directorio */
+		if(!move_uploaded_file($_FILES['producto_foto']['tmp_name'], $img_dir.$foto)){
+			echo '
+	            <div class="notification is-danger is-light">
+	                <strong>¡Ocurrio un error inesperado!</strong><br>
+	                No podemos subir la imagen al sistema en este momento, por favor intente nuevamente
+	            </div>
+	        ';
+			exit();
+		}
+
+	}
+
+
 
     /*== Actualizando datos ==*/
     $actualizar_producto=conexion();
-    $actualizar_producto=$actualizar_producto->prepare("UPDATE producto SET producto_codigo=:codigo,producto_nombre=:nombre,producto_precio=:precio,producto_stock=:stock,categoria_id=:categoria WHERE producto_id=:id");
+    $actualizar_producto=$actualizar_producto->prepare("UPDATE producto SET producto_codigo=:codigo,producto_nombre=:nombre,producto_precio=:precio,producto_stock=:stock,producto_foto=:foto,producto_detalle=:detalle,categoria_id=:categoria WHERE producto_id=:id");
 
     $marcadores=[
         ":codigo"=>$codigo,
         ":nombre"=>$nombre,
         ":precio"=>$precio,
         ":stock"=>$stock,
+        ":foto"=>$foto,
+        ":detalle"=>$detalle,
         ":categoria"=>$categoria,
         ":id"=>$id
     ];
 
 
     if($actualizar_producto->execute($marcadores)){
-        echo '
-            <div class="notification is-info is-light">
-                <strong>¡PRODUCTO ACTUALIZADO!</strong><br>
-                El producto se actualizo con exito
-            </div>
-        ';
-    }else{
-        echo '
-            <div class="notification is-danger is-light">
-                <strong>¡Ocurrio un error inesperado!</strong><br>
-                No se pudo actualizar el producto, por favor intente nuevamente
-            </div>
-        ';
+        echo json_encode([
+            "success" => true,
+            "redirect" => "/Inventario_GigaRED-main/index.php?vista=product_list"
+        ]);
+    } else {
+        echo json_encode([
+            "success" => false,
+            "message" => "Error al actualizar el producto"
+        ]);
     }
+
     $actualizar_producto=null;
+?>
