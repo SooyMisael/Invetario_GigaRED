@@ -10,10 +10,11 @@
 	$stock=limpiar_cadena($_POST['producto_stock']);
 	$categoria=limpiar_cadena($_POST['producto_categoria']);
     $detalle=limpiar_cadena($_POST['producto_detalle']);
+    $proveedor=limpiar_cadena($_POST['producto_proveedor']);
 
 
 	/*== Verificando campos obligatorios ==*/
-    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria=="" || $detalle==""){
+    if($codigo=="" || $nombre=="" || $precio=="" || $stock=="" || $categoria=="" || $detalle=="" || $proveedor==""){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -25,7 +26,7 @@
 
 
     /*== Verificando integridad de los datos ==*/
-    if(verificar_datos("[a-zA-Z0-9- ]{1,70}",$codigo)){
+    if(verificar_datos("[0-9.]{1,70}",$codigo)){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -65,6 +66,15 @@
         exit();
     }
 
+    if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ().,$#\-\/ ]{1,70}",$proveedor)){
+        echo '
+            <div class="notification is-danger is-light">
+                <strong>¡Ocurrio un error inesperado!</strong><br>
+                El NOMBRE no coincide con el formato solicitado
+            </div>
+        ';
+        exit();
+    }
 
     /*== Verificando codigo ==*/
     $check_codigo=conexion();
@@ -110,7 +120,8 @@
     }
     $check_categoria=null;
 
-
+   
+    $check_categoria=null;
     /* Directorios de imagenes */
 	$img_dir='../img/producto/';
 
@@ -192,7 +203,7 @@
 
 	/*== Guardando datos ==*/
     $guardar_producto=conexion();
-    $guardar_producto=$guardar_producto->prepare("INSERT INTO producto(producto_codigo,producto_nombre,producto_precio,producto_stock,producto_foto,producto_detalle,categoria_id) VALUES(:codigo,:nombre,:precio,:stock,:foto,:detalle,:categoria)");
+    $guardar_producto=$guardar_producto->prepare("INSERT INTO producto(producto_codigo,producto_nombre,producto_precio,producto_stock,producto_foto,producto_detalle,categoria_id, producto_proveedor) VALUES(:codigo,:nombre,:precio,:stock,:foto,:detalle,:categoria, :proveedor)");
 
     $marcadores=[
         ":codigo"=>$codigo,
@@ -201,7 +212,8 @@
         ":stock"=>$stock,
         ":foto"=>$foto,
         ":detalle"=>$detalle,
-        ":categoria"=>$categoria
+        ":categoria"=>$categoria,
+        ":proveedor"=>$proveedor
     ];
 
     $guardar_producto->execute($marcadores);

@@ -1,18 +1,23 @@
 <?php
-	/*== Almacenando datos ==*/
+	#Almacenando datos
+	#Obtenemos el ID de la categoria
     $category_id_del=limpiar_cadena($_GET['category_id_del']);
 
-    /*== Verificando usuario ==*/
+    #Verificando si la categoria existe
     $check_categoria=conexion();
     $check_categoria=$check_categoria->query("SELECT categoria_id FROM categoria WHERE categoria_id='$category_id_del'");
     
     if($check_categoria->rowCount()==1){
 
+
+		#Verificacion si la categoria tiene productos asociados
     	$check_productos=conexion();
     	$check_productos=$check_productos->query("SELECT categoria_id FROM producto WHERE categoria_id='$category_id_del' LIMIT 1");
 
     	if($check_productos->rowCount()<=0){
 
+
+			#Eliminando categoria
     		$eliminar_categoria=conexion();
 	    	$eliminar_categoria=$eliminar_categoria->prepare("DELETE FROM categoria WHERE categoria_id=:id");
 
@@ -35,6 +40,7 @@
 		    }
 		    $eliminar_categoria=null;
     	}else{
+			#Notificacion que no se puede eliminar producto asociado a una categoria
     		echo '
 	            <div class="notification is-danger is-light">
 	                <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -44,6 +50,7 @@
     	}
     	$check_productos=null;
     }else{
+		#Categoria no existe
     	echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>

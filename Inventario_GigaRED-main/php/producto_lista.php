@@ -1,29 +1,37 @@
 <?php 
+	
+	#Calcular la paginacion de la pagina
 	$inicio = ($pagina>0) ? (($pagina * $registros)-$registros) : 0;
 	$tabla="";
 
-	$campos = "producto.producto_id,producto.producto_codigo,producto.producto_nombre,producto.producto_precio,producto.producto_stock,producto.producto_foto,producto.categoria_id,categoria.categoria_id,categoria.categoria_nombre";
+	#Definir los campos en las consultas
+	$campos = "producto.producto_id,producto.producto_codigo,producto.producto_nombre,producto.producto_precio,producto.producto_stock,producto.producto_foto,producto.producto_proveedor,producto.categoria_id,categoria.categoria_id,categoria.categoria_nombre";
 
+	#Existe alguna busqueda
 	if(isset($busqueda) && $busqueda!=""){
 
+		#Consulta los productos por busqueda
 		$consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id WHERE producto.producto_codigo LIKE '%$busqueda%' OR producto.producto_nombre LIKE '%$busqueda%' ORDER BY producto.producto_nombre ASC LIMIT $inicio,$registros";
 
 		$consulta_total="SELECT COUNT(producto_id) FROM producto WHERE producto_codigo LIKE '%$busqueda%' OR producto_nombre LIKE '%$busqueda%'";
 
 	}elseif($categoria_id>0){
 
+		#Filtro por categoria
 		$consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id WHERE producto.categoria_id='$categoria_id' ORDER BY producto.producto_nombre ASC LIMIT $inicio,$registros";
 
 		$consulta_total="SELECT COUNT(producto_id) FROM producto WHERE categoria_id='$categoria_id'";
 
 	}else{
 
+		#No se realizo busqueda y filtra todos los productos
 		$consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id ORDER BY producto.producto_nombre ASC LIMIT $inicio,$registros";
 
 		$consulta_total="SELECT COUNT(producto_id) FROM producto";
 
 	}
 
+	#Ejecutar consultas en la base de datos
 	$conexion=conexion();
 
 	$datos = $conexion->query($consulta_datos);
@@ -36,6 +44,7 @@
 
 	$vista_actual = $_GET['vista'] ?? "home";
 
+	#Listado de productos
 	if($total>=1 && $pagina<=$Npaginas){
 		$contador=$inicio+1;
 		$pag_inicio=$inicio+1;
@@ -58,7 +67,8 @@
 			                <strong>'.$contador.' - '.$rows['producto_nombre'].'</strong><br>
 			                <strong>CODIGO:</strong> '.$rows['producto_codigo'].', 
 			                <strong>PRECIO:</strong> $'.$rows['producto_precio'].', 
-			                <strong>CATEGORIA:</strong> '.$rows['categoria_nombre'].'
+			                <strong>CATEGORIA:</strong> '.$rows['categoria_nombre'].',
+							<strong>PROVEEDOR:</strong> '.$rows['producto_proveedor'].'
 			              </p>
 			            </div>
 			            <div class="has-text-right">

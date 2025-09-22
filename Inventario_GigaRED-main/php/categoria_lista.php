@@ -1,11 +1,10 @@
-/**
-Permite Buscar las categorias que se encuentran en la lista
-Muestra los resultados en una tabla que contiene diferentes opciones para las categorias
-Tales como ver producto, actualizar y Eliminar
-Solo se pueden eliminar las categorias cuando no se tenga ningun producto asociado.
-*/
-
 <?php
+#Permite Buscar las categorias que se encuentran en la lista
+#Muestra los resultados en una tabla que contiene diferentes opciones para las categorias
+#Tales como ver producto, actualizar y Eliminar
+#Solo se pueden eliminar las categorias cuando no se tenga ningun producto asociado.#
+
+
 # Calculo para la paginacion #
 $inicio = ($pagina>0) ? (($pagina * $registros)-$registros) : 0;
 $tabla="";

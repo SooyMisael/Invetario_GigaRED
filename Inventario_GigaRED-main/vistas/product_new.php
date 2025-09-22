@@ -15,7 +15,8 @@
 		  	<div class="column">
 		    	<div class="control">
 					<label>Código de barra</label>
-				  	<input class="input" type="text" name="producto_codigo" pattern="[a-zA-Z0-9- ]{1,70}" maxlength="70" required >
+				  	<input class="input" type="text" name="producto_codigo" pattern="[0-9]{1,70}" maxlength="70" required >
+					<small class="help">Formato: solo números, máximo 70 dígitos.</small>
 				</div>
 		  	</div>
 		  	<div class="column">
@@ -30,12 +31,19 @@
 		    	<div class="control">
 					<label>Precio</label>
 				  	<input class="input" type="text" name="producto_precio" pattern="[0-9.]{1,25}" maxlength="25" required >
+					<small class="help">Formato: solo números, máximo 25 dígitos.</small>
 				</div>
 		  	</div>
 		  	<div class="column">
 		    	<div class="control">
 					<label>Stock</label>
 				  	<input class="input" type="text" name="producto_stock" pattern="[0-9]{1,25}" maxlength="25" required >
+				</div>
+		  	</div>
+			<div class="column">
+		    	<div class="control">
+					<label>Proveedor</label>
+				  	<input class="input" type="text" name="producto_proveedor" pattern="[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ().,$#\-\/ ]{1,70}" maxlength="70" required >
 				</div>
 		  	</div>
 		  	<div class="column">
@@ -86,18 +94,56 @@
 			<button type="submit" class="button is-info is-rounded">Guardar</button>
 		</p>
 	</form>
-	<script>
-		const fileInput = document.getElementById('fileInput');
-		const fileName = document.getElementById('fileName');
+<script>
+    // Valida campos en tiempo real
+    document.querySelectorAll("input[pattern]").forEach(input => {
+        input.addEventListener("input", () => {
+            const regex = new RegExp("^" + input.getAttribute("pattern") + "$");
+            let errorSpan = input.nextElementSibling;
 
-		fileInput.addEventListener('change', () => {
-			if (fileInput.files.length > 0) {
-				fileName.textContent = fileInput.files[0].name;
-			} else {
-				fileName.textContent = "JPG, JPEG, PNG. (MAX 3MB)";
-			}
-	    });
-    </script>
+            // Si no existe el span de error, lo creamos
+            if (!errorSpan || !errorSpan.classList.contains("error-msg")) {
+                errorSpan = document.createElement("span");
+                errorSpan.classList.add("error-msg");
+                errorSpan.style.color = "red";
+                errorSpan.style.fontSize = "12px";
+                input.insertAdjacentElement("afterend", errorSpan);
+            }
+
+            // Validamos con la regex del pattern
+            if (input.value !== "" && !regex.test(input.value)) {
+                errorSpan.textContent = "***Formato no valido***";
+            } else {
+                errorSpan.textContent = "";
+            }
+        });
+    });
+
+    // Validación del archivo (tamaño y extensión)
+    document.getElementById('fileInput').addEventListener('change', function () {
+        const file = this.files[0];
+        const fileName = document.getElementById('fileName');
+
+        if (file) {
+            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+            if (!allowedTypes.includes(file.type)) {
+                alert("***Solo se permiten archivos JPG, JPEG o PNG***");
+                this.value = ""; // limpia el input
+                fileName.textContent = "JPG, JPEG, PNG. (MAX 3MB)";
+                return;
+            }
+
+            if (file.size > 3 * 1024 * 1024) { // 3MB
+                alert("***El archivo no puede superar los 3MB***");
+                this.value = "";
+                fileName.textContent = "JPG, JPEG, PNG. (MAX 3MB)";
+                return;
+            }
+
+            fileName.textContent = file.name;
+        }
+    });
+</script>
 </div>
 
 
