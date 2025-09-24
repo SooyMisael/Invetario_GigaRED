@@ -5,7 +5,7 @@
 	$tabla="";
 
 	#Definir los campos en las consultas
-	$campos = "producto.producto_id,producto.producto_codigo,producto.producto_nombre,producto.producto_precio,producto.producto_stock,producto.producto_foto,producto.producto_proveedor,producto.categoria_id,categoria.categoria_id,categoria.categoria_nombre";
+	$campos = "producto.producto_id,producto.producto_codigo,producto.producto_nombre,producto.producto_precio,producto.producto_stock,producto.producto_foto,producto.producto_proveedor,producto.categoria_id,categoria.categoria_id,categoria.categoria_nombre, categoria.categoria_ubicacion";
 
 	#Existe alguna busqueda
 	if(isset($busqueda) && $busqueda!=""){
@@ -65,10 +65,11 @@
 			            <div class="content">
 			              <p>
 			                <strong>'.$contador.' - '.$rows['producto_nombre'].'</strong><br>
-			                <strong>CODIGO:</strong> '.$rows['producto_codigo'].', 
-			                <strong>PRECIO:</strong> $'.$rows['producto_precio'].', 
-			                <strong>CATEGORIA:</strong> '.$rows['categoria_nombre'].',
-							<strong>PROVEEDOR:</strong> '.$rows['producto_proveedor'].'
+
+							<strong>PRECIO:</strong> $'.$rows['producto_precio'].',
+							<strong>CANTIDAD:</strong> $'.$rows['producto_stock'].',
+							<strong>CATEGORIA:</strong> '.$rows['categoria_nombre'].',
+							<strong>UBICACIÓN:</strong> '.$rows['categoria_ubicacion'].'
 			              </p>
 			            </div>
 			            <div class="has-text-right">

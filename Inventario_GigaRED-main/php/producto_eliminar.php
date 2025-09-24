@@ -31,6 +31,12 @@
 	                <strong>¡PRODUCTO ELIMINADO!</strong><br>
 	                Los datos del producto se eliminaron con exito
 	            </div>
+
+				<script>
+            		setTimeout(function(){
+                		window.location.href = "index.php?vista=product_list";
+            		}, 3500); 
+       			</script>
 	        ';
 	    }else{
 	        echo '
@@ -49,6 +55,12 @@
                 <strong>¡Ocurrio un error inesperado!</strong><br>
                 El PRODUCTO que intenta eliminar no existe
             </div>
+
+			<script>
+            	setTimeout(function(){
+                	window.location.href = "index.php?vista=product_list";
+            	}, 3500); 
+       		</script>
         ';
     }
     $check_producto=null;

@@ -12,9 +12,8 @@ document.addEventListener("DOMContentLoaded", function(){
             fetch(action, { method: method, body: data })
                 .then(res => res.json())
                 .then(respuesta => {
-                    console.log("Respuesta del servidor:", respuesta); // <- revisa esto
+                    console.log("Respuesta del servidor:", respuesta); 
                     if(respuesta.success && respuesta.redirect){
-                        // 🔹 redirección inmediata
                         window.location.href = respuesta.redirect.replace(/\\/g,'');
                         return;
                     }

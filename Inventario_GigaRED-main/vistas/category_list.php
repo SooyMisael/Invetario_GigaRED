@@ -47,6 +47,11 @@
     </div>
     </div>
 </div>
+<style>
+    .modal-background{
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+</style>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById("modalEliminar");

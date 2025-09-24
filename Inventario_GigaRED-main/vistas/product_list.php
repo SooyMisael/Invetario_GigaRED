@@ -29,7 +29,7 @@
         $busqueda="";
 
         if(isset($_SESSION['mensaje'])){
-            echo '<div class="notification is-'.$_SESSION['tipo'].' is-light">
+            echo '<div id="notificacion" class="notification is-'.$_SESSION['tipo'].' is-light">
                     '.$_SESSION['mensaje'].'
                 </div>';
             unset($_SESSION['mensaje']);
@@ -47,7 +47,7 @@
                 <button class="delete" aria-label="close" id="cerrarModal"></button>
             </header>
             <section class="modal-card-body">
-                <p>¿Estás seguro de que deseas eliminar esta categoría?</p>
+                <p>¿Estás seguro de que deseas eliminar este producto?</p>
             </section>
             <footer class="modal-card-foot">
                 <button class="button" id="cancelarEliminar">Cancelar</button>
@@ -56,19 +56,25 @@
         </div>
     </div>
 </div>
+<style>
+    .modal-background{
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+</style>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById("modalEliminar");
         const btnCerrar = document.getElementById("cerrarModal");
         const btnCancelar = document.getElementById("cancelarEliminar");
         const btnConfirmar = document.getElementById("btnConfirmarEliminar");
+        
 
         // Cuando se hace clic en un botón "Eliminar"
         document.querySelectorAll(".js-delete-button").forEach(boton => {
             boton.addEventListener("click", (e) => {
                 e.preventDefault();
                 let id = boton.getAttribute("data-id");
-                btnConfirmar.href = "index.php?vista=product_list&category_id_del=" + id;
+                btnConfirmar.href = "index.php?vista=product_list&product_id_del=" + id;
                 modal.classList.add("is-active");
             });
         });

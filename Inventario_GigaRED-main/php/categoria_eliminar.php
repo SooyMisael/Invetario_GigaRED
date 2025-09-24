@@ -29,6 +29,12 @@
 		                <strong>¡CATEGORIA ELIMINADA!</strong><br>
 		                Los datos de la categoría se eliminaron con exito
 		            </div>
+
+					<script>
+            			setTimeout(function(){
+                			window.location.href = "index.php?vista=category_list";
+            			}, 2500); 
+       				</script>
 		        ';
 		    }else{
 		        echo '
@@ -46,6 +52,12 @@
 	                <strong>¡Ocurrio un error inesperado!</strong><br>
 	                No podemos eliminar la categoría ya que tiene productos asociados
 	            </div>
+
+				<script>
+            		setTimeout(function(){
+                		window.location.href = "index.php?vista=category_list";
+            		}, 2500); 
+       			</script>
 	        ';
     	}
     	$check_productos=null;

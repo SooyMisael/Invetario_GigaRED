@@ -36,7 +36,7 @@
 		  	</div>
 		  	<div class="column">
 		    	<div class="control">
-					<label>Stock</label>
+					<label>Cantidad</label>
 				  	<input class="input" type="text" name="producto_stock" pattern="[0-9]{1,25}" maxlength="25" required >
 				</div>
 		  	</div>
@@ -92,6 +92,7 @@
 		</div>
 		<p class="has-text-centered">
 			<button type="submit" class="button is-info is-rounded">Guardar</button>
+			<button type="reset" class="button is-light is-rounded">Limpiar</button>
 		</p>
 	</form>
 <script>
@@ -143,6 +144,14 @@
             fileName.textContent = file.name;
         }
     });
+
+	document.querySelector(".FormularioAjax").addEventListener("reset", function(){
+		document.getElementById("fileName").textContent = "JPG, JPEG, PNG. (MAX 3MB)";
+
+		document.querySelectorAll(".error-msg").forEach(span => {
+			span.textContent = "";
+		});
+	});
 </script>
 </div>
 

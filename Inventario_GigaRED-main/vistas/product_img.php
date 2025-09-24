@@ -13,7 +13,7 @@
 		/*== Verificando producto ==*/
     	$check_producto = conexion();
     	$check_producto = $check_producto->query("
-    		SELECT p.*, c.categoria_nombre 
+    		SELECT p.*, c.categoria_nombre, c.categoria_ubicacion 
     		FROM producto p
     		LEFT JOIN categoria c ON p.categoria_id = c.categoria_id
     		WHERE p.producto_id='$id'
@@ -50,10 +50,15 @@
 			<!-- Nombre -->
 			<h2 class="title has-text-centered"><?php echo $datos['producto_nombre']; ?></h2>
 
+			<p><strong>Precio:</strong> <?php echo $datos['producto_precio']; ?></p>
+
 			<p><strong>Categoria:</strong> <?php echo $datos['categoria_nombre']; ?></p>
 
-			<!-- Stock -->
-			<p><strong>Stock:</strong> <?php echo $datos['producto_stock']; ?></p>
+			<p><strong>Cantidad:</strong> <?php echo $datos['producto_stock']; ?></p>
+
+			<p><strong>Proveedor:</strong> <?php echo $datos['producto_proveedor']; ?></p>
+
+			<p><strong>Ubicacion:</strong> <?php echo $datos['categoria_ubicacion']; ?></p>
 
 			<!-- Descripción / Detalles -->
 			<h3 class="title is-5 mt-6">Descripción del Producto</h3>

@@ -40,7 +40,7 @@
 
 
     #Verificando integridad de los datos#
-    if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{4,50}",$nombre)){
+    if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,50}",$nombre)){
         echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -51,7 +51,7 @@
     }
 
     if($ubicacion!=""){
-    	if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{5,150}",$ubicacion)){
+    	if(verificar_datos("[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{2,150}",$ubicacion)){
 	        echo '
 	            <div class="notification is-danger is-light">
 	                <strong>¡Ocurrio un error inesperado!</strong><br>
